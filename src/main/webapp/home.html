@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Your Title</title>
+	
+	<style type="text/css" media="screen">
+		html, body 		{ margin: 0; padding: 0; }
+		body 			{ color: #333; font: 12px Helvetica, Arial, sans-serif; line-height: 18px; }
+		h2				{ color: #333; }
+		a				{ color: #337810; }
+		p				{ margin: 0 0 18px; }
+		#wrapper		{ float: left; width: 100%; }
+		
+		/* Header */
+		#header			{ background: #eee; border-bottom: 2px solid #ddd; }
+		#header h1  	{ color: #004b6f; margin: 0 0 3px; padding: 24px 18px 0; }
+		#header p		{ color: #666; font-size: 11px; font-weight: bold; padding: 0 18px; }
+		
+		/* Content Style */
+		#navigation		{ border-bottom: 1px solid #ccc; padding-left: 18px; }
+		#navigation ul	{ padding: 0 18px 9px; }
+		#extra			{ border-bottom: 1px solid #ccc; padding-right: 18px; }
+		#extra small	{ font-size: 11px; line-height: 18px; }
+		#content p, #extra p { padding-right: 18px; }
+		
+		/* Content Positioning and Size */
+		#navigation		{ float: left; width: 182px; margin-left: -100%; }
+		#next		{ margin: 0 225px 36px; }
+		#content		{ margin: 0 225px 36px; }
+		#extra			{ float: left; margin-left: -200px; width: 182px; }		/* Footer */
+		#footer			{ background: #333; border-bottom: 2px solid #999; clear: left; width: 100%; }
+		#footer a		{ color: #eee; }
+		#footer	p		{ color: #ccc; margin: 0; padding: 0 18px 10px; }
+		#footer ul		{ border-bottom: 1px solid #555; list-style: none; margin: 0 18px 6px; padding: 10px 0 6px; }
+		#footer li		{ display: inline; font-size: 11px; font-weight: bold; padding-right: 5px; }
+	</style>
+	<!--[if IE]>
+	<style type="text/css">
+	    #navigation, #content, #extra { margin-top: 20px; }
+	</style>
+	<![endif]-->
+	<script src="js/xwidgets.js"></script>	
+	<script>
+		window.onload=function() {
+			var model = new Model({url:"navbar.do"});
+			var sidenavbar = new Nav({placeholder:"left-nav"});
+			var footernavbar = new Nav({placeholder:"footer-nav"});			
+			model.addView(sidenavbar);
+			model.addView(footernavbar);
+			model.connect();
+		}
+	</script>	
+</head><body>
+	<div id="container">
+		<div id="header">
+			<h1>XWidgets.</h1>
+			<p class="description">Javascript UI library and Java based server component.</p>
+		</div>
+		<div id="wrapper">
+			<div id="content">
+				<h2>Reusable Modular programming.</h2>
+				<p>Cue the obligatory <em>Lorem Ipsum</em> riff-raff type text, <a href="">Followed by an example of a link.</a> There are many uses for <em>Lorem Ipsum</em>, using it as filled text isn't recommended. Make sure to always use actual content when building your websites! It just makes more sense. Now for the lipsum.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
+			<input id="next" type="button" value="Next">
+
+		</div>
+		<div id="navigation">
+			<h2>Navigation Here</h2>
+			<div id="left-nav">
+			</div>
+		</div>
+		<div id="extra">
+			<h2>Extra Stuff Goes Here</h2>
+			<p>Sometimes this would be called a <em>sidebar</em>, but it doesn't always have to be on the side to be called a <em>sidebar</em>. Sidebars can be on tops of things, below things, but they are usually beside things &ndash; hence it being a called a sidebar.</p>
+			<p><small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</small></p>
+			
+		</div>
+		<div id="footer">
+			<div id="footer-nav">
+			</div>
+			<p>Footer stuff goes here. Copyright, disclaimers &ndash; stuff like that.</p>
+		</div>
+	</div>
+</body>
+</html>
