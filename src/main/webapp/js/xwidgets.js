@@ -1,7 +1,41 @@
-/**
+/**The MIT License (MIT)
+
+Copyright (c) <year> <copyright holders>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
  * 
  */
+
+	 
+/*
+ * Initialization code to setup subclassing.
+ */
+Object.prototype.extend = function(parent) {
+Object.protoype=Object.create(parent.prototype);
+Object.prototype.constructor=parent;
+Object.prototype.parent=parent;
+};
+
+
+
 function Model(config) {
+ 
 	this.url = config.url;
 	this.type=(config.type!=null)?config.type:{};
 	this.views = new Array();
@@ -28,9 +62,16 @@ function Model(config) {
 	}
 }
 
+
+
+
 function View(config) {
 	this.impl = (config.impl!=null)?config.impl:"remote";
 	this.placeholder = config.placeholder;
+	this.id;
+	this.values=[];
+	this.name="default";
+	this.type;	
 }
 
 View.prototype.render=function(data) {
@@ -40,37 +81,10 @@ View.prototype.render=function(data) {
 	}	
 }
 
-function Nav(config) {
-	View.call(this, config);
-}
 
-Nav.prototype = Object.create(View.prototype);
-Nav.prototype.constructor=View;
 
-Nav.prototype.preProcess=function(data) {
-	var ret = new String(data);
-	ret = ret.replace("[", "");
-	ret = ret.replace(/\"/g, "");
-	ret = ret.replace("]", "");
-	console.log(ret);
-	return ret.split(",");	
-}
 
-Nav.prototype.render=function(data) {
-	var ph = document.getElementById(this.placeholder);
-	var list = document.createElement("ul");
-	var datArr = this.preProcess(data);
-	
-	for(var i = 0; i <datArr.length; i++) {
-		var listElement = document.createElement("li");
-		var a = document.createElement("a");
-		var listContent = document.createTextNode(datArr[i]);
-		a.appendChild(listContent);
-		listElement.appendChild(a);
-		list.appendChild(listElement);
-	}
-	ph.appendChild(list);
-}
+
 
 
 function Ajax() {
