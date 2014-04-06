@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
+	<link rel="stylesheet" type="text/css" href="css/pager.css"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>Your Title</title>
 	
@@ -40,15 +41,28 @@
 	    #navigation, #content, #extra { margin-top: 20px; }
 	</style>
 	<![endif]-->
-	<script src="js/xwidgets.js"></script>	
+	<script src="js/xwidgets.js"></script>
+	<script src="js/demo.js"></script>	
 	<script>
 		window.onload=function() {
 			var model = new Model({url:"navbar.do"});
 			var sidenavbar = new Nav({placeholder:"left-nav"});
-			var footernavbar = new Nav({placeholder:"footer-nav"});			
+			var footernavbar = new Nav({placeholder:"footer-nav"});
 			model.addView(sidenavbar);
 			model.addView(footernavbar);
-			model.connect();
+			model.init();
+			
+			var pagenum = new Object();
+			pagenum["pageNumber"]=1;
+			var pageTextModel = new Model({url:"textpage.do",
+										  type:pagenum,
+										  keyname:"paginator"
+										 });
+										 
+			var pagedView = new PagedView({placeholder:"content",modelkeyname:"paginator"});
+			pageTextModel.addView(pagedView);
+			pageTextModel.init();
+			
 		}
 	</script>	
 </head><body>
@@ -59,16 +73,21 @@
 		</div>
 		<div id="wrapper">
 			<div id="content">
-				<h2>Reusable Modular programming.</h2>
-				<p>Cue the obligatory <em>Lorem Ipsum</em> riff-raff type text, <a href="">Followed by an example of a link.</a> There are many uses for <em>Lorem Ipsum</em>, using it as filled text isn't recommended. Make sure to always use actual content when building your websites! It just makes more sense. Now for the lipsum.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<!-- 					<div class="pagedpanecontent">
+					</div>
+					<div class="toolbar"><input id="prev" class="button" type="button" value="Previous"></input></div>
+					<div class="toolbar"><input id="nxt" class="button" type="button" value="Next"></input></div>
+					<div class="toolbar">
+						<span class="ctrl">Go To:</span>
+						<input class="pager" type="text"></input>
+						<input type="button" class="button_small" value="Go"></input>
+					</div>
+					<div class="toolbar"><span>Page 1 of 8</span></div> -->
 			</div>
-			<input id="next" type="button" value="Next">
 
 		</div>
 		<div id="navigation">
-			<h2>Navigation Here</h2>
+			<h2>Categories</h2>
 			<div id="left-nav">
 			</div>
 		</div>
