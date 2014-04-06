@@ -26,7 +26,6 @@ THE SOFTWARE.
 /*
  * Initialization code to setup subclassing.
  */
-<<<<<<< HEAD
 Function.prototype.extend = function(parent) {
 	if ( parent.constructor == Function ) {	
 		this.prototype=Object.create(parent.prototype);
@@ -43,14 +42,6 @@ Function.prototype.extend = function(parent) {
 //global static object model event queue.
 var modelEventQueue = new Object();
 
-=======
-Object.prototype.extend = function(parent) {
-Object.protoype=Object.create(parent.prototype);
-Object.prototype.constructor=parent;
-Object.prototype.parent=parent;
-};
-
->>>>>>> 417cf62f2f203bca0e404df112055f6ee0ca5063
 
 
 function Model(config) {
@@ -106,17 +97,10 @@ function Model(config) {
 function View(config) {
 	this.impl = (config.impl!=null)?config.impl:"remote";
 	this.placeholder = config.placeholder;
-<<<<<<< HEAD
 	this.values=[];
 	this.name="default";
 	this.type;
 	this.modelkeyname;
-=======
-	this.id;
-	this.values=[];
-	this.name="default";
-	this.type;	
->>>>>>> 417cf62f2f203bca0e404df112055f6ee0ca5063
 }
 
 View.prototype.render=function(data) {
@@ -126,7 +110,6 @@ View.prototype.render=function(data) {
 	}	
 };
 
-<<<<<<< HEAD
 View.prototype.onUpdateResponse=function(data) {
 	console.log(data);
 };
@@ -152,13 +135,6 @@ View.prototype.onUpdateResponse=function(data) {
 		console.log(data);
 	}
 }*/
-=======
-
-
-
-
-
->>>>>>> 417cf62f2f203bca0e404df112055f6ee0ca5063
 
 function Ajax() {
 	this.x = function() {
