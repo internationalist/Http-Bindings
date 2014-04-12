@@ -126,7 +126,8 @@ public enum RequestProcessor {
 		} catch(ClassNotFoundException cnfe) {
 			throw new GeneralException(cnfe);			
 		} catch(InvocationTargetException ite) {
-			throw new GeneralException(ite);			
+			Throwable t = ite.getCause();
+			throw new GeneralException(t);
 		} catch(IOException ioe) {
 			throw new GeneralException(ioe);			
 		} catch(TemplateException te) {

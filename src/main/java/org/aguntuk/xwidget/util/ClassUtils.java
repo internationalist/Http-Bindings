@@ -213,6 +213,9 @@ public enum ClassUtils {
 				}				
 				retVal = shortArray;
 				break;
+			case STRING_ARRAY:
+				retVal = s;
+				break;
 		}
 		return retVal;
 	}
