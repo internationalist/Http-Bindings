@@ -26,11 +26,21 @@ THE SOFTWARE.
 /*
  * Initialization code to setup subclassing.
  */
-Object.prototype.extend = function(parent) {
-Object.protoype=Object.create(parent.prototype);
-Object.prototype.constructor=parent;
-Object.prototype.parent=parent;
+Function.prototype.extend = function(parent) {
+	if ( parent.constructor == Function ) {	
+		this.prototype=Object.create(parent.prototype);
+		this.prototype.constructor=this;
+		this.prototype.parent=parent;
+	} else{
+		//Pure Virtual Inheritance 
+		this.prototype = parent;
+		this.prototype.constructor = this;
+		this.prototype.parent = parent;		
+	}
 };
+
+//global static object model event queue.
+var modelEventQueue = new Object();
 
 
 
@@ -39,27 +49,46 @@ function Model(config) {
 	this.url = config.url;
 	this.type=(config.type!=null)?config.type:{};
 	this.views = new Array();
+	this.submitData = new Object();
+	if(config.keyname!=null) {
+		modelEventQueue[config.keyname]=this;
+	}
+	
 	this.updateView = function(data) {
-		
 		for(var i = 0;i <this.views.length;i++) {
 			this.views[i].render(data);
 		}
 	}
 	
+	this.updateResponse = function(data) {
+		for(var i = 0;i <this.views.length;i++) {
+			this.views[i].onUpdateResponse(data);
+		}
+	}
+	
+	this.update = function() {
+		for(var i = 0, tot = this.views.length; i <tot;i++){
+			this.submitData[this.views[i].name]=this.views[i].values;
+		}
+		var ajax = new Ajax();
+		ajax.post(this.url, this.submitData, this, this.updateResponse, false);
+	}	
+	
+	
 	this.addView = function(view) {
 		this.views.push(view);
 	}
 	
-	this.connect = function() {
+	this.init = function() {
 		var ajax = new Ajax();
 		ajax.post(this.url, this.type, this, this.updateView, false);
 	}
 	
-	this.onTimer = function(activate) {
+/*	this.onTimer = function(activate) {
 		if(activate) {
 			window.setInterval(function() {this.connect()}, config.frequency);
 		}
-	}
+	}*/
 }
 
 
@@ -68,10 +97,10 @@ function Model(config) {
 function View(config) {
 	this.impl = (config.impl!=null)?config.impl:"remote";
 	this.placeholder = config.placeholder;
-	this.id;
 	this.values=[];
 	this.name="default";
-	this.type;	
+	this.type;
+	this.modelkeyname;
 }
 
 View.prototype.render=function(data) {
@@ -79,13 +108,33 @@ View.prototype.render=function(data) {
 		var ph = document.getElementById(this.placeholder);
 		ph.innerHtml = data;
 	}	
-}
+};
+
+View.prototype.onUpdateResponse=function(data) {
+	console.log(data);
+};
 
 
-
-
-
-
+/*function Form(url) {
+	this.formObjects = new Array();
+	this.addFormObject(formObject) {
+		formObjects.push(formObject);
+	}
+	this.url=url;
+	this.type="POST";
+	this.submit = function() {
+		var data = new Object();
+		for(var i = 0, var tot = formObjects.length; i <tot;i++){
+			data[formObjects.name]=formObjects.values;
+		}
+		var ajax = new Ajax();
+		ajax.post(this.url, this.type, this, this.handleResponse, false);
+	}
+	
+	this.handleResponse = function(data) {
+		console.log(data);
+	}
+}*/
 
 function Ajax() {
 	this.x = function() {
@@ -116,7 +165,7 @@ function Ajax() {
 	    x.open(method, url, sync);
 	    x.onreadystatechange = function() {
 	        if (x.readyState == 4) {
-	            callback.call(callBackHandler, x.responseText);
+	            callback.call(callBackHandler, JSON.parse(x.responseText));
 	        }
 	    };
 	    if (method == 'POST') {

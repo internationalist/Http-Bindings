@@ -1,0 +1,39 @@
+div.pagedpanecontent {
+    height:200px;
+    width:800px;
+    border:1px solid grey;
+}
+div.toolbar {
+    width:120px;
+    height:20px;
+    float:left;
+    padding-top:5px;
+    
+
+}
+
+div.toolbar-right {
+    width:100px;
+    height:20px;
+    float:right;
+    padding-top:5px;
+}
+input.button {
+    width:70px;
+}
+input.button_small {
+    margin-left:10px;
+    width:30px;
+}
+div.toolbar span {
+    color:grey;
+    font-family:Calibri;
+}
+div.toolbar span.ctrl {
+    color:black;
+    font-family:Calibri;
+}
+.pager {
+    margin-left:5px;
+    width:20px;
+}
