@@ -24,6 +24,7 @@ THE SOFTWARE.
 package org.aguntuk.xwidget.management;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
@@ -61,13 +62,7 @@ public enum RequestProcessor {
 			
 			if(requestClass != null && requestClass.length() > 0) {
 				//create instance of the class
-				Object bean = Class.forName(requestClass).newInstance();
-				HashMap<String, String[]> map = new HashMap<String, String[]>();
-				for(Enumeration<String> names = request.getParameterNames();names.hasMoreElements();) {
-					String name = names.nextElement();
-					map.put(name, request.getParameterValues(name));
-				}
-				BeanUtils.populate(bean, map);
+				Object bean = populateBean(request, requestClass);
 				serviceMethodReturn = m.invoke(service.getServiceInstance(), bean);				
 			} else if(requestKeys!= null && requestKeys.length > 0) {
 				Object[] argValues = new Object[requestKeys.length];
@@ -135,5 +130,36 @@ public enum RequestProcessor {
 		} catch(Exception exc) {
 			throw new GeneralException(exc);			
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Object populateBean(HttpServletRequest request, String requestClass)
+			throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, InvocationTargetException {
+		Class reqClass = Class.forName(requestClass);
+		Object bean = reqClass.newInstance();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		for(Enumeration<String> names = request.getParameterNames();names.hasMoreElements();) {
+			String name = names.nextElement();
+			map.put(name, request.getParameterValues(name));
+		}
+		//scan the members for any nested class
+		Field[] fields = reqClass.getDeclaredFields();
+		for(Field f: fields) {
+			Class classType = f.getType();
+			String type = classType.toString();
+			String memberName = f.getName();
+			System.out.println(type + " " + memberName);
+			if(type.indexOf("class") > -1) {
+				if(!type.contains("java.lang")) {// we hit upon a nested object
+					//recursive call
+					Object nestedBean = populateBean(request, classType.getName());
+					map.put(memberName, nestedBean);
+				}
+			}
+		}
+
+		BeanUtils.populate(bean, map);
+		return bean;
 	}
 }
