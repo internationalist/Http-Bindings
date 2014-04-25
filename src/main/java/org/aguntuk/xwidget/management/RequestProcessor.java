@@ -67,13 +67,6 @@ public enum RequestProcessor {
 					beans[i] = gson.fromJson(reader, reqBeanClass);
 				}
 				serviceMethodReturn = m.invoke(service.getServiceInstance(), beans);				
-/*			} else if(requestClass != null && requestClass.length > 0) {
-				Object[] beans = new Object[requestClass.length];				
-				//create instance of the class
-				for(int i = 0; i < beans.length; i++) {				
-					beans[i] = populateBean(request, requestClass[i]);
-				}
-				serviceMethodReturn = m.invoke(service.getServiceInstance(), beans);*/				
 			} else if(requestKeys!= null && requestKeys.length > 0) {
 				Object[] argValues = new Object[requestKeys.length];
 				int j = 0;
