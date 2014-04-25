@@ -24,6 +24,7 @@ THE SOFTWARE.
 package org.aguntuk.xwidget.management;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -39,8 +40,19 @@ public enum ServiceFacade {
 		serviceRequestMap.put(requesType, service);
 	}
 	
-	public Service getService(String requestType) {
-		return serviceRequestMap.get(requestType);
+	public Service getService(String serviceName) {
+		return serviceRequestMap.get(serviceName);
+	}
+	
+	public Service getServiceForRequestType(String requestType) {
+		Service retVal = null;
+		for(Iterator<String> iter=serviceRequestMap.keySet().iterator();iter.hasNext();) {
+			Service service = serviceRequestMap.get(iter.next());
+			if(service.getRequest(requestType)!=null) {
+				retVal = service;
+			}
+		}
+		return retVal;
 	}
 	
 

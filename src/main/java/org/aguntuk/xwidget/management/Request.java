@@ -25,15 +25,17 @@ package org.aguntuk.xwidget.management;
 
 import java.lang.reflect.Method;
 
+import org.aguntuk.xwidget.util.InputFormat;
 import org.aguntuk.xwidget.util.OutputFormat;
 
 public class Request {
 	private Method serviceMethod;
 	private String template;
 	private OutputFormat outputType;
-	private String requestClassName;
+/*	private String[] requestClassName;*/
 	private RequestKey[] requestKey;
 	private String jsp;
+	private InputFormat inputType;
 	
 	public Request(Method serviceMethod, String template, String format) {
 		this.serviceMethod=serviceMethod;
@@ -53,13 +55,13 @@ public class Request {
 		return outputType;
 	}
 	
-	public String getRequestClassName() {
+/*	public String[] getRequestClassName() {
 		return requestClassName;
 	}
 
-	public void setRequestClassName(String requestClassName) {
+	public void setRequestClassName(String[] requestClassName) {
 		this.requestClassName = requestClassName;
-	}
+	}*/
 
 	public RequestKey[] getRequestKey() {
 		return requestKey;
@@ -75,5 +77,13 @@ public class Request {
 
 	public void setJsp(String jsp) {
 		this.jsp = jsp;
+	}
+
+	public InputFormat getInputType() {
+		return inputType;
+	}
+
+	public void setInputType(String inputType) {
+		this.inputType = InputFormat.valueOf(inputType);
 	}	
 }

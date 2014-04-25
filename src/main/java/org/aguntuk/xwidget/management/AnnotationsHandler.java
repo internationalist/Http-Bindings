@@ -38,7 +38,7 @@ import org.reflections.Reflections;
 public enum AnnotationsHandler {
 	INSTANCE;
 	
-	public void scanClassPathForRequestInterfaces(String targetPkg, String serviceName) throws InitializationException {
+	public void scanClassPathForRequestInterfaces(String targetPkg) throws InitializationException {
 		try {
 		    out.println(targetPkg);
 		    Reflections reflections = new Reflections(targetPkg);
@@ -51,6 +51,7 @@ public enum AnnotationsHandler {
 		    	 Class<?> obj = iter.next();
 		    	 out.println("Annotated object found is " + obj);
 		    	 Object instance = obj.newInstance();
+		    	 String serviceName = obj.getName();
 		    	 Service service = ServiceFacade.INSTANCE.getService(serviceName);
 		    	 if(service == null) {
 			    	 service = new Service(obj, instance);
@@ -65,24 +66,45 @@ public enum AnnotationsHandler {
 		    			 out.println("Request type is " + requestName);
 		    			 String templateFile = requestMeta.templateFile();
 		    			 String outputType = requestMeta.outputType();
-		    			 String requestClass = requestMeta.requestObject();
+		    			 String inputType = requestMeta.inputType();
+		    			 //String[] requestClass = requestMeta.requestClass();
+		    			 String keys[] = requestMeta.requestKeyName();
 		    			 String jsp = requestMeta.jsp();
 		    			 RequestKey[] requestKeys = null;
-		    			 if(requestClass == null || requestClass.length()==0) {
-		    					 String keys[] = requestMeta.requestKeyName();
-		    					 requestKeys = new RequestKey[keys.length];
-		    					 Method method = (Method)annotationElement;
-		    					 Class<?>[] classes = method.getParameterTypes();
-		    					 for(int i = 0; i < keys.length; i++) {
-		    						 requestKeys[i] = new RequestKey(keys[i], classes[i].getName());
-		    					 }	    					 
+    					 Method method = (Method)annotationElement;
+		    			 Class<?>[] classes = method.getParameterTypes();
+		    			 int keyNamePosition = 0;
+    					 requestKeys = new RequestKey[classes.length];		    			 
+		    			 for(int i = 0; i < classes.length; i++) {
+		    				 String paramClassName = classes[i].getName();
+		    				 if(paramClassName.contains("java.lang")) {//this means the argument is primitive and we will need a keyname
+	    						 requestKeys[i] = new RequestKey(keys[keyNamePosition], classes[i].getName(), classes[i].isArray(), false);
+			    				 ++keyNamePosition;	    						 
+		    				 } else {
+	    						 requestKeys[i] = new RequestKey(classes[i].getName(), classes[i].isArray(), true);
+		    				 }
 		    			 }
 		    			 
+/*		    			 if(keys != null && keys.length > 0) {
+		    					 requestKeys = new RequestKey[keys.length];
+		    					 //Class<?>[] classes = method.getParameterTypes();
+		    					 for(int i = 0; i < keys.length; i++) {
+		    						 requestKeys[i] = new RequestKey(keys[i], classes[i].getName(), classes[i].isArray(), false);
+		    					 }	    					 
+		    			 } else {
+	    					 //Class<?>[] classes = method.getParameterTypes();
+
+	    					 for(int i = 0; i < classes.length; i++) {
+	    						 requestKeys[i] = new RequestKey(classes[i].getName(), classes[i].isArray(), true);
+	    					 }
+		    			 }
+*/		    			 
 		    			 //create the Request class to hold all the info	    			 
 		    			 Request request = new Request((Method)annotationElement, templateFile, outputType);
-		    			 request.setRequestClassName(requestClass);
+		    			 //request.setRequestClassName(requestClass);
 		    			 request.setRequestKey(requestKeys);
 		    			 request.setJsp(jsp);
+		    			 request.setInputType(inputType);
 		    			 service.addRequestMethod(requestName, request);
 		    		 }
 		    	 }

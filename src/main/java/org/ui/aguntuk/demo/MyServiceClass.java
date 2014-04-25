@@ -43,9 +43,7 @@ public class MyServiceClass {
 	}
 	
 	@RequestMeta(templateFile="abc",requestName="TESTOBJECTARGUMENT",
-			outputType=OutputFormat.JSON,
-			requestObject="org.ui.aguntuk.demo.Person"
-	)
+			outputType=OutputFormat.JSON)
 	public Person testWithPerson(Person person) {
 		System.out.println(person);
 		return person;

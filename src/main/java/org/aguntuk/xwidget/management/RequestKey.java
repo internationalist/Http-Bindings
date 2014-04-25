@@ -27,16 +27,33 @@ package org.aguntuk.xwidget.management;
 public class RequestKey {
 	private String keyName;
 	private String keyType;
+	boolean isArray;
+	boolean isCustomObject;
 	
-	public RequestKey(String keyName, String keyType) {
+	public RequestKey(String keyName, String keyType, boolean isArray, boolean isCustomObject) {
 		this.keyName=keyName;
 		this.keyType=keyType;
+		this.isArray=isArray;
+		this.isCustomObject=isCustomObject;
 	}
+	
+	public RequestKey(String keyType, boolean isArray, boolean isCustomObject) {
+		this.keyType=keyType;
+		this.isArray=isArray;
+		this.isCustomObject=isCustomObject;
+	}
+	
 	public String getKeyName() {
 		return keyName;
 	}
 	public String getKeyType() {
 		return keyType;
+	}
+	public boolean isArray() {
+		return isArray;
+	}
+	public boolean isCustomObject() {
+		return isCustomObject;
 	}
 
 }

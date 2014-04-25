@@ -29,6 +29,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.aguntuk.xwidget.util.InputFormat;
 import org.aguntuk.xwidget.util.OutputFormat;
 
 @Documented
@@ -37,9 +38,10 @@ import org.aguntuk.xwidget.util.OutputFormat;
 public @interface RequestMeta {
 
 	String requestName();
-	String requestObject() default "";
+/*	String[] requestClass() default {};*/
 	String templateFile() default "";
 	String outputType() default OutputFormat.HTML;
+	String inputType()  default InputFormat.KEYVALUE;
 	String[] requestKeyName() default {};
 	String jsp() default "";
 }

@@ -136,6 +136,11 @@ View.prototype.onUpdateResponse=function(data) {
 	}
 }*/
 
+function AjaxData() {
+	this.keyName;
+	this.dataArr = new Array();
+}
+
 function Ajax() {
 	this.x = function() {
 	    if (typeof XMLHttpRequest !== 'undefined') {
@@ -162,7 +167,12 @@ function Ajax() {
 	
 	this.send = function(url, callBackHandler, callback, method, data, sync) {
 	    var x = this.x();
-	    x.open(method, url, sync);
+	    if(method=='JSONPOST') {
+		    x.open('POST', url, sync);	    	
+	    } else {
+		    x.open(method, url, sync);	    	
+	    }
+
 	    x.onreadystatechange = function() {
 	        if (x.readyState == 4) {
 	            callback.call(callBackHandler, JSON.parse(x.responseText));
@@ -170,6 +180,8 @@ function Ajax() {
 	    };
 	    if (method == 'POST') {
 	        x.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	    } else if(method == 'JSONPOST') {
+	        x.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
 	    }
 	    x.send(data)
 	};
@@ -184,10 +196,20 @@ function Ajax() {
 
 	this.post = function(url, data, callBackHandler, callback, sync) {
 	    var query = [];
-	    for (var key in data) {
+/*	    for (var key in data) {
 	        query.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+	    }*/
+	    for(var i = 0; i < data.length; i++) {
+	    	for(var j = 0; j < data[i].dataArr.length; j++) {
+	    		query.push(encodeURIComponent(data[i].keyName) + '=' + encodeURIComponent(data[i].dataArr[j]));
+	    	}
 	    }
-	    this.send(url, callBackHandler, callback, 'POST', query.join('&'), sync)
-	};	
+	    this.send(url, callBackHandler, callback, 'POST', query.join('&'), sync);
+	};
+	
+	this.jsonpost = function(url, data, callBackHandler, callback, sync) {
+		var jsonObj = JSON.stringify(data);
+	    this.send(url, callBackHandler, callback, 'POST', jsonObj, sync);
+	}; 
 		
 }

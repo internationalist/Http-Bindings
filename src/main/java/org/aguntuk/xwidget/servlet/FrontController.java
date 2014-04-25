@@ -56,7 +56,7 @@ public class FrontController extends HttpServlet {
 		    if(targetPkg == null || targetPkg.length() == 0) {
 		    	out.println("FrontController:: init. ERROR No target package specified. BlockUI will not run services.");
 		    }
-		    AnnotationsHandler.INSTANCE.scanClassPathForRequestInterfaces(targetPkg, serviceName);
+		    AnnotationsHandler.INSTANCE.scanClassPathForRequestInterfaces(targetPkg);
 		    
 		    String templatePluginFactoryClassName = config.getInitParameter("templatePluginFactoryClassName")!=null
 		    ?config.getInitParameter("templatePluginFactoryClassName"):"org.aguntuk.xwidget.template.freemarker.FreemarkerTemplatePluginFactory";
@@ -74,7 +74,7 @@ public class FrontController extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			TemplatePlugin template = templateFactory.getTempatePluginInstance();			
-			Object obj = RequestProcessor.INSTANCE.processRequest(request, response, template, this.getServletName());
+			Object obj = RequestProcessor.INSTANCE.processRequest(request, response, template);
 			PrintWriter pw = response.getWriter();			
 			if(obj != null) {
 				pw.println(obj);				
